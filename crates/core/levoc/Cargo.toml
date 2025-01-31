@@ -1,0 +1,7 @@
+[package]
+name = "levoc"
+version = "0.1.0"
+authors = ["Ahraman <ahraman.programming@gmail.com>"]
+
+edition.workspace = true
+rust-version.workspace = true

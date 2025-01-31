@@ -3,5 +3,5 @@
 version = 4
 
 [[package]]
-name = "levo"
+name = "levoc"
 version = "0.1.0"
