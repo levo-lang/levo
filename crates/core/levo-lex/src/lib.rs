@@ -125,7 +125,10 @@ fn is_id_continue(ch: char) -> bool {
 
 #[test]
 fn lexer_test() {
-    let texts = ["a + b + c"];
+    let texts = [
+        "a + b + c",
+        "abcde012345sxa_assd + _ssvsqdckaosc12323dcoascmsa",
+    ];
     for (num, text) in texts.iter().enumerate() {
         println!("====== {num} ======");
         let mut lexer = Lexer::new(text);
