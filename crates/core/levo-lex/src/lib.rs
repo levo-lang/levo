@@ -45,6 +45,8 @@ impl<'a> Lexer<'a> {
         let kind = match self.peek()? {
             '+' => self.lex_op(Op::Plus),
             '-' => self.lex_op(Op::Minus),
+            '*' => self.lex_op(Op::Asterisk),
+            '%' => self.lex_op(Op::Percent),
             '/' => {
                 _ = self.advance();
                 match self.peek() {
@@ -52,7 +54,7 @@ impl<'a> Lexer<'a> {
                 }
             }
 
-            ch if unicode_ident::is_xid_start(ch) => self.lex_ident(),
+            ch if is_id_start(ch) => self.lex_ident(),
             ch if ch.is_ascii_digit() => self.lex_num(),
             ch if ch.is_whitespace() => self.lex_whitespace(),
 
@@ -66,7 +68,7 @@ impl<'a> Lexer<'a> {
     }
 
     fn lex_ident(&mut self) -> TokenKind {
-        self.lex_while(TokenKind::Ident, unicode_ident::is_xid_continue)
+        self.lex_while(TokenKind::Ident, is_id_continue)
     }
 
     fn lex_num(&mut self) -> TokenKind {
@@ -113,9 +115,20 @@ impl Lexer<'_> {
     }
 }
 
+fn is_id_start(ch: char) -> bool {
+    ch == '_' || unicode_ident::is_xid_start(ch)
+}
+
+fn is_id_continue(ch: char) -> bool {
+    unicode_ident::is_xid_continue(ch)
+}
+
 #[test]
 fn lexer_test() {
-    let texts = ["a + b + c"];
+    let texts = [
+        "a + b + c",
+        "abcde012345sxa_assd + _ssvsqdckaosc12323dcoascmsa",
+    ];
     for (num, text) in texts.iter().enumerate() {
         println!("====== {num} ======");
         let mut lexer = Lexer::new(text);

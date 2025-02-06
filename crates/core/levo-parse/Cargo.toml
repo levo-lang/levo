@@ -1,0 +1,10 @@
+[package]
+name = "levo-parse"
+version = "0.1.0"
+authors = ["Ahraman <ahraman.programming@gmail.com>"]
+
+edition.workspace = true
+rust-version.workspace = true
+
+[dependencies]
+levo-lex = { path = "../levo-lex" }
