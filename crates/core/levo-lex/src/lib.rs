@@ -45,6 +45,8 @@ impl<'a> Lexer<'a> {
         let kind = match self.peek()? {
             '+' => self.lex_op(Op::Plus),
             '-' => self.lex_op(Op::Minus),
+            '*' => self.lex_op(Op::Asterisk),
+            '%' => self.lex_op(Op::Percent),
             '/' => {
                 _ = self.advance();
                 match self.peek() {
