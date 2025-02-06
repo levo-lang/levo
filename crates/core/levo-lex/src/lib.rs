@@ -54,7 +54,7 @@ impl<'a> Lexer<'a> {
                 }
             }
 
-            ch if unicode_ident::is_xid_start(ch) => self.lex_ident(),
+            ch if is_id_start(ch) => self.lex_ident(),
             ch if ch.is_ascii_digit() => self.lex_num(),
             ch if ch.is_whitespace() => self.lex_whitespace(),
 
@@ -68,7 +68,7 @@ impl<'a> Lexer<'a> {
     }
 
     fn lex_ident(&mut self) -> TokenKind {
-        self.lex_while(TokenKind::Ident, unicode_ident::is_xid_continue)
+        self.lex_while(TokenKind::Ident, is_id_continue)
     }
 
     fn lex_num(&mut self) -> TokenKind {
@@ -113,6 +113,14 @@ impl Lexer<'_> {
     fn peek(&self) -> Option<char> {
         self.chars.clone().next()
     }
+}
+
+fn is_id_start(ch: char) -> bool {
+    ch == '_' || unicode_ident::is_xid_start(ch)
+}
+
+fn is_id_continue(ch: char) -> bool {
+    unicode_ident::is_xid_continue(ch)
 }
 
 #[test]
