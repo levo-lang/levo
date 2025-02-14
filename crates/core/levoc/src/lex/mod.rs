@@ -14,6 +14,9 @@ use self::token::{
 pub mod cursor;
 pub mod token;
 
+#[cfg(test)]
+mod tests;
+
 trait CharExt {
     fn is_newline(self) -> bool;
 
@@ -30,7 +33,7 @@ impl CharExt for char {
     }
 
     fn is_ident_start(self) -> bool {
-        is_xid_start(self)
+        self == '_' || is_xid_start(self)
     }
 
     fn is_ident_continue(self) -> bool {
