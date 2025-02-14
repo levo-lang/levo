@@ -327,43 +327,37 @@ impl Cursor<'_> {
             return true;
         }
 
+        let mut terminated = false;
         loop {
-            break if let Some(ch) = self.bump() {
+            if let Some(ch) = self.peek() {
                 match ch {
-                    '\\' => {
-                        // skip the next character
-                        _ = self.bump();
-                        continue;
-                    }
-                    '\n' => false,
-                    '\'' => true,
-                    _ => continue,
+                    '\'' => break terminated = true,
+                    ch if ch.is_newline() => break, // newline is not part of char literal
+                    '\\' => _ = self.bump_nth(1),   // skip the backslash and the next char
+                    _ => _ = self.bump(),
                 }
-            } else {
-                false
-            };
+            }
         }
+
+        terminated
     }
 
     fn eat_str_lit(&mut self) -> bool {
         debug_assert!(matches!(self.prev(), Some('"')));
 
+        let mut terminated = false;
         loop {
-            break if let Some(ch) = self.bump() {
+            if let Some(ch) = self.peek() {
                 match ch {
-                    '\\' => {
-                        // skip the next character
-                        _ = self.bump();
-                        continue;
-                    }
-                    '\n' => false,
-                    '"' => true,
-                    _ => continue,
+                    '"' => break terminated = true,
+                    ch if ch.is_newline() => break, // newline is not part of char literal
+                    '\\' => _ = self.bump_nth(1),   // skip the backslash and the next char
+                    _ => _ = self.bump(),
                 }
-            } else {
-                false
-            };
+            }
         }
+
+        terminated
     }
 
     fn eat_suffix(&mut self) {
