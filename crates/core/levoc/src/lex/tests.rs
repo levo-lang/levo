@@ -19,10 +19,10 @@ fn lexer_test() {
         "// \n",
         "// a\na",
         "_abc234 + 0x2323_adcs / 0o32.3rd * 32.3e+2 + 32.3e-2 - 11e7",
-        "0x + 1e + 1.a",
+        "0x + 1e + 1.a + a.1",
         "'a'",
         "\"bcsdcs\"xdcs",
-        "\"\n\"",
+        "\"\\n\"",
         "' xsxscsc\r\n'",
     ];
 
