@@ -329,13 +329,16 @@ impl Cursor<'_> {
 
         let mut terminated = false;
         loop {
-            if let Some(ch) = self.peek() {
-                match ch {
-                    '\'' => break terminated = true,
-                    ch if ch.is_newline() => break, // newline is not part of char literal
-                    '\\' => _ = self.bump_nth(1),   // skip the backslash and the next char
-                    _ => _ = self.bump(),
+            match self.peek() {
+                Some('\'') => {
+                    _ = self.bump();
+                    break terminated = true;
                 }
+                Some(ch) if ch.is_newline() => break, // newline is not part of char literal
+                None => break,
+
+                Some('\\') => _ = self.bump_nth(1), // skip the backslash and the next char
+                _ => _ = self.bump(),
             }
         }
 
@@ -347,13 +350,16 @@ impl Cursor<'_> {
 
         let mut terminated = false;
         loop {
-            if let Some(ch) = self.peek() {
-                match ch {
-                    '"' => break terminated = true,
-                    ch if ch.is_newline() => break, // newline is not part of char literal
-                    '\\' => _ = self.bump_nth(1),   // skip the backslash and the next char
-                    _ => _ = self.bump(),
+            match self.peek() {
+                Some('"') => {
+                    _ = self.bump();
+                    break terminated = true;
                 }
+                Some(ch) if ch.is_newline() => break, // newline is not part of char literal
+                None => break,
+
+                Some('\\') => _ = self.bump_nth(1), // skip the backslash and the next char
+                _ => _ = self.bump(),
             }
         }
 
