@@ -61,6 +61,12 @@ pub struct Token {
     pub kind: TokenKind,
 }
 
+impl Token {
+    pub fn new(len: usize, kind: TokenKind) -> Self {
+        Self { len, kind }
+    }
+}
+
 #[derive(Debug, Clone, Copy)]
 pub enum TokenKind {
     Unknown,
@@ -68,23 +74,14 @@ pub enum TokenKind {
     Whitespace,
     Newline,
 
-    LineComment {
-        style: CommentKind,
-    },
-    BlockComment {
-        style: CommentKind,
-        terminated: bool,
-    },
+    LineComment { kind: CommentKind },
+    BlockComment { kind: CommentKind, terminated: bool },
 
     Ident,
-    Lit {
-        kind: LitKind,
-        suffix_start: u32,
-    },
+    Lit { kind: LitKind, suffix_start: u32 },
 
     Punc(Punc),
 
-    // delimiter
     Open(Delim),
     Close(Delim),
 }
