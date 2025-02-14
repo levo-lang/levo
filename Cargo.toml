@@ -1,6 +1,7 @@
-[package]
-name = "levo"
-version = "0.1.0"
-edition = "2021"
+[workspace]
+resolver = "3"
+members = ["crates/*/*"]
 
-[dependencies]
+[workspace.package]
+edition = "2021"
+rust-version = "1.84.1"
