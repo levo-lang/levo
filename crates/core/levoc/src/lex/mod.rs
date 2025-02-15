@@ -46,7 +46,7 @@ impl Cursor<'_> {
         let kind = match self.bump()? {
             ch if ch.is_whitespace() => self.eat_whitespace(ch),
             ch if ch.is_ident_start() => self.eat_ident(),
-            ch if ch.is_ascii_digit() => {
+            ch @ '0'..='9' => {
                 let kind = self.eat_num_lit(ch);
                 let suffix_start = self.pos() as u32;
                 self.eat_suffix();
@@ -114,6 +114,7 @@ impl Cursor<'_> {
 
     fn eat_whitespace(&mut self, first: char) -> TokenKind {
         debug_assert!(self.prev().is_some_and(|ch| ch.is_whitespace()));
+
         match first {
             '\r' => {
                 if self.peek().is_some_and(|ch| ch == '\n') {
@@ -205,6 +206,7 @@ impl Cursor<'_> {
 
     fn eat_ident(&mut self) -> TokenKind {
         debug_assert!(self.prev().is_some_and(|ch| ch.is_ident_start()));
+
         self.bump_while(|ch| ch.is_ident_continue());
         Ident
     }
@@ -369,7 +371,7 @@ impl Cursor<'_> {
     fn eat_suffix(&mut self) {
         if self.peek().is_some_and(char::is_ident_start) {
             _ = self.bump();
-            self.bump_while(char::is_ident_continue);
+            self.bump_while(|ch| ch.is_ident_continue());
         }
     }
 }
